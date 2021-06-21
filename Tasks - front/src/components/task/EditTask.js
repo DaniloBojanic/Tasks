@@ -2,117 +2,102 @@ import React from 'react';
 import Axios from '../../apis/Axios';
 import {Button, Form} from 'react-bootstrap'
 
-class EditLine extends React.Component {
+class EditTask extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = { 
-            lineId: -1, 
-            lineAvailableSeats: 0, 
-            linePrice: 0, 
-            lineScheduled: "",
-            lineDestination: "" }
+            id: -1, 
+            name: "", 
+            employee: "", 
+            points: 0 }
     }
 
     componentDidMount() {
-        this.getLineById(this.props.match.params.id);
-     }
+        this.getTaskById(this.props.match.params.id);
+    }
 
-     getLineById(lineId) {
-        Axios.get('/lines/' + lineId)
+    getTaskById(taskId) {
+        Axios.get('/tasks/' + taskId)
         .then(res => {
             // handle success
             console.log(res.data)
-            this.setState({lineId: res.data.id, lineAvailableSeats: res.data.availableSeats, linePrice:res.data.price, lineScheduled:res.data.scheduled, lineDestination:res.data.destination  });
+            this.setState({id: res.data.id, name: res.data.name, employee:res.data.employee, points:res.data.points});
         })
         .catch(error => {
             // handle error
             console.log(error);
-            alert('Unable to get line!');
+            alert('Unable to get task!');
          });
-    }
-
-    onAvailableSeatsChange = event => {
-        console.log(event.target.value);
-
-        const { name, value } = event.target;
-        console.log(name + ", " + value);
-
-        this.setState((state, props) => ({
-            lineAvailableSeats: value
-        }));
-    }
-
-    onPriceChange = event => {
-        console.log(event.target.value);
-
-        const { name, value } = event.target;
-        console.log(name + ", " + value);
-
-        this.setState((state, props) => ({
-            linePrice: value
-        }));
-    }
-
-    onScheduledChange = event => {
-        console.log(event.target.value);
-
-        const { name, value } = event.target;
-        console.log(name + ", " + value);
-
-        this.setState((state, props) => ({
-            lineScheduled: value
-        }));
-    }
-
-    onDestinationChange = event => {
-        console.log(event.target.value);
-
-        const { name, value } = event.target;
-        console.log(name + ", " + value);
-
-        this.setState((state, props) => ({
-            lineDestination: value
-        }));
     }
 
     edit() {
         var params = {
-            'id' : this.state.lineId,
-            'availableSeats' : this.state.lineAvailableSeats,
-            'price' : this.state.linePrice,
-            'scheduled' : this.state.lineScheduled,
-            'destination' : this.state.lineDestination
+            'id' : this.state.id,
+            'name' : this.state.name,
+            'employee' : this.state.employee,
+            'points' : this.state.points
         }
 
-        Axios.put('/lines/' + this.state.lineId, params)
+        Axios.put('/tasks/' + this.state.id, params)
         .then(res => {
             // handle success
             console.log(res);
-            alert('Line is successfully changed!');
-            this.props.history.push('/lines');
+            alert('Task successfully changed!');
+            this.props.history.push('/tasks');
         })
         .catch(error => {
             // handle error
             console.log(error);
-            alert('Line is not changed');
+            alert('Unable to change task!');
          });
     }
 
-    render() {
+    nameChange = event => {
+        console.log(event.target.value);
+
+        const { name, value } = event.target;
+        console.log(name + ", " + value);
+
+        this.setState((state, props) => ({
+            name: value
+        }));
+    }
+
+    employeeChange = event => {
+        console.log(event.target.value);
+
+        const { name, value } = event.target;
+        console.log(name + ", " + value);
+
+        this.setState((state, props) => ({
+            employee: value
+        }));
+    }
+
+    pointsChange = event => {
+        console.log(event.target.value);
+
+        const { name, value } = event.target;
+        console.log(name + ", " + value);
+
+        this.setState((state, props) => ({
+            points: value
+        }));
+    }
+
+    render () {
         return (
             <div>
-                <h1>Edit line</h1>
+                <h1>Edit task</h1>
                 <Form>
-                    <Form.Label htmlFor="lAvailableSeats">Available Seats</Form.Label><br/>
-                    <Form.Control id="lAvailableSeats" type="number" value={this.state.lineAvailableSeats} onChange={(e) => this.onAvailableSeatsChange(e)}/><br/>
-                    <Form.Label htmlFor="lPrice">Price</Form.Label><br/>
-                    <Form.Control id="lPrice" type="number" value={this.state.linePrice} onChange={(e) => this.onPriceChange(e)}/><br/>
-                    <Form.Label htmlFor="lScheduled">Scheduled</Form.Label><br/>
-                    <Form.Control id="lScheduled" type="text" value={this.state.lineScheduled} onChange={(e) => this.onScheduledChange(e)}/><br/>
-                    <Form.Label htmlFor="lDestination">Destination</Form.Label><br/>
-                    <Form.Control id="lDestination" type="text" value={this.state.lineDestination} onChange={(e) => this.onDestinationChange(e)}/><br/>
+                    <Form.Label htmlFor="tName">Name</Form.Label><br/>
+                    <Form.Control id="tName" type="text" value={this.state.name} onChange={(e) => this.nameChange(e)}/><br/>
+                    <Form.Label htmlFor="tEmployee">Employee</Form.Label><br/>
+                    <Form.Control id="tEmployee" type="text" value={this.state.employee} onChange={(e) => this.employeeChange(e)}/><br/>
+                    <Form.Label htmlFor="tPoints">Points</Form.Label><br/>
+                    <Form.Control id="tPoints" type="number" value={this.state.points} onChange={(e) => this.pointsChange(e)}/><br/>
                     <Button className="btn btn-primary" onClick={() => this.edit()}>Edit</Button>
                 </Form>
             </div>
@@ -120,4 +105,4 @@ class EditLine extends React.Component {
     }
 }
 
-export default EditLine;
+export default EditTask;

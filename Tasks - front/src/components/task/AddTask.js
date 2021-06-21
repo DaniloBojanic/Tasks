@@ -1,138 +1,163 @@
 import React from 'react';
 import Axios from '../../apis/Axios';
 import {Button, Form} from 'react-bootstrap'
-import getCompaniesAction from "../../actions/GetCompanies";
-import { connect } from "react-redux";
 
-class AddLine extends React.Component {
+class AddTask extends React.Component {
 
     constructor(props){
         super(props);
 
-        let line = {
-            availableSeats: 0,
-            price: 0,
-            scheduled: "",
-            destination: "",
-            companyDTO: null
+        let task = {
+            name: "",
+            employee: "",
+            points: 0,
+            sprint: null,
+            state: null
         }
 
-        this.state = {line: line, companies: []};
+        this.state = {task: task, states: [], sprints: []};
     }
 
     componentDidMount(){
-        this.props.getCompanies();
+        this.getStates();
+        this.getSprints();
     }
 
-    getCompanies() {
-        Axios.get('/companies')
+    getStates() {
+        Axios.get('/states')
             .then(res => {
                  // handle success
                  console.log(res);
-                 this.setState({companies: res.data});
+                 this.setState({states: res.data});
             })
             .catch(error => {
                 // handle error
                 console.log(error);
-                alert('Unable to get companies');
+                alert('Unable to reach states!');
             });
     }
 
-    
+    getSprints() {
+        Axios.get('/sprints')
+            .then(res => {
+                 // handle success
+                 console.log(res);
+                 this.setState({sprints: res.data});
+            })
+            .catch(error => {
+                // handle error
+                console.log(error);
+                alert('Unable to reach sprints!');
+            });
+    }
+
     onInputChange(e) {
         let input = e.target;
     
         let name = input.name;
         let value = input.value;
     
-        let line = this.state.line;
-        line[name] = value;
+        let task = this.state.task;
+        task[name] = value;
     
-        this.setState({ line: line });
-        console.log(this.state.line)
+        this.setState({ task: task });
+        console.log(this.state.task)
     }
 
-    companySelectionChange(e) {
+    sprintSelectionChange(e) {
+        let sprintId = e.target.value;
+        let sprint = this.state.sprints.find((sprint) => sprint.id == sprintId);
+        console.log(sprint)
 
-        let companyId = e.target.value;
-        let company = this.props.companies.find((company) => company.id == companyId);
-        console.log(company)
+        let task = this.state.task;
+        task.sprint = sprint;
 
-        let line = this.state.line;
-        line.companyDTO = company;
-
-        this.setState({line: line});
-        console.log(this.state.line)
-
+        this.setState({task: task});
+        console.log(this.state.task)
     }
 
-    create(event) {
-        event.preventDefault();
+    stateSelectionChange(e) {
+        let stateId = e.target.value;
+        let state = this.state.states.find((state) => state.id == stateId);
+        console.log(state)
 
-        let line = this.state.line;
+        let task = this.state.task;
+        task.state = state;
 
-            let lineDTO = {
-                availableSeats: line.availableSeats,
-                price: line.price,
-                scheduled: line.scheduled,
-                destination: line.destination,
-                companyDTO: line.companyDTO
+        this.setState({task: task});
+        console.log(this.state.task)
+    }
+
+    create(e) {
+        e.preventDefault();
+
+        let task = this.state.task;
+
+            let taskDTO = {
+                name: task.name,
+                employee: task.employee,
+                points: task.points,
+                sprint: task.sprint,
+                state: task.state
             }
 
-        Axios.post('/lines', lineDTO)
+        Axios.post('/tasks', taskDTO)
         .then(res => {
             // handle success
             console.log(res);
            
-            alert('Line was added successfully!');
-            this.props.history.push('/lines');
+            alert('Task was added successfully!');
+            this.props.history.push('/tasks');
         })
         .catch(error => {
             // handle error
             console.log(error);
-            alert('Line is not added!');
+            alert('Unable to create task!');
          });
     }
 
-    render() {
+    render () {
         return (
             <div>
-                <h1>Add line</h1>
+                <h1>Add task</h1>
                 <Form>
-                    <Form.Label htmlFor="lavailableSeats">Available Seats</Form.Label><br/>
-                    <Form.Control id="lavailableSeats" type="number" name="availableSeats" onChange={(e) => this.onInputChange(e)}/><br/>
-                    <Form.Label htmlFor="lprice">Price</Form.Label><br/>
-                    <Form.Control id="lprice" type="number" name="price" onChange={(e) => this.onInputChange(e)}/><br/>
-                    <Form.Label htmlFor="lscheduled">Scheduled</Form.Label><br/>
-                    <Form.Control id="lscheduled" type="text" name="scheduled" onChange={(e) => this.onInputChange(e)}/><br/>
-                    <Form.Label htmlFor="ldestination">Destination</Form.Label><br/>
-                    <Form.Control id="ldestination" type="text" name="destination" onChange={(e) => this.onInputChange(e)}/><br/>
-
-                    <Form.Label htmlFor="lcompanyDTO">Company</Form.Label><br/>
-                    <Form.Control as="select" id="lcompanyDTO" onChange={event => this.companySelectionChange(event)}>
+                    <Form.Label htmlFor="tName">Name</Form.Label><br/>
+                    <Form.Control id="tName" type="text" name="name" onChange={(e) => this.onInputChange(e)}/><br/>
+                    <Form.Label htmlFor="tEmployee">Employee</Form.Label><br/>
+                    <Form.Control id="tEmployee" type="text" name="employee" onChange={(e) => this.onInputChange(e)}/><br/>
+                    <Form.Label htmlFor="tPoints">Points</Form.Label><br/>
+                    <Form.Control id="tPoints" type="number" name="points" onChange={(e) => this.onInputChange(e)}/><br/>
+                    <Form.Label htmlFor="tSprint">Sprint</Form.Label><br/>
+                    <Form.Control as="select" id="tSprint" onChange={event => this.sprintSelectionChange(event)}>
                         <option></option>
                         {
-                            this.props.companies.map((company) => {
+                            this.state.sprints.map((sprint) => {
                                 return (
-                                    <option key={company.id} value={company.id}>
-                                        {company.name}
+                                    <option key={sprint.id} value={sprint.id}>
+                                        {sprint.name}
                                     </option>
                                 )
                             })
                         }
                     </Form.Control><br/>
-                    
-                    <Button className="btn btn-primary" onClick={(event)=>{this.create(event);}}>Add</Button>
+                    <Form.Label htmlFor="tState">State</Form.Label><br/>
+                    <Form.Control as="select" id="tState" onChange={event => this.stateSelectionChange(event)}>
+                        <option></option>
+                        {
+                            this.state.states.map((state) => {
+                                return (
+                                    <option key={state.id} value={state.id}>
+                                        {state.name}
+                                    </option>
+                                )
+                            })
+                        }
+                    </Form.Control><br/>
+                    <button className="btn btn-primary" onClick={(event)=>{this.create(event);}}>Add</button>
                 </Form>
             </div>
         )
     }
 }
-const mapStateToProps = (state, ownProps) => {
-    // console.log(state);
-    return { companies: state.companies };
-  };
-  
-  export default connect(mapStateToProps, {
-    getCompanies: getCompaniesAction,
-  })(AddLine);
+
+export default AddTask;
