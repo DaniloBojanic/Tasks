@@ -1,0 +1,5 @@
+package finale.support;
+
+public class TaskDtoToTask {
+
+}
