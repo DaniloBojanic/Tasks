@@ -1,0 +1,5 @@
+package finale.service;
+
+public interface SprintService {
+
+}

@@ -1,0 +1,5 @@
+package finale.service.impl;
+
+public class JpaSprintService {
+
+}
