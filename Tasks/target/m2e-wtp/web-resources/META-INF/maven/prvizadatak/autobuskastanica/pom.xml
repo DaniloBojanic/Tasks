@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.5.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+  <groupId>prvizadatak</groupId>
+  <artifactId>autobuskastanica</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>autobuskastanica Maven Webapp</name>
+  <!-- FIXME change it to the project's website -->
+  <url>http://www.example.com</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- Add dependencies for tomcat container -->
+		<!-- Omogućuje da se Tomcat veb kontejner ugradi u izvršnu verziju aplikacije. 
+			Tomcat je predefinisani veb kontejner za Spring Boot verziju 2.2.5.RELEASE. 
+			Može se koristiti i Jetty veb kontejner sa spring-boot-starter-jetty, ili 
+			Undertow sa spring-boot-starter-undertow. -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Add dependencies for testing -->
+		<!-- pribavljanje test okruženja, artifact će ujedno prevući i JUnit biblioteku -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+
+		<!-- Add spring-boot-devtools -->
+		<!-- modul je poželjno koristiti tokom samog razvoja veb aplikacija jer 
+			omogućuje dodatne pogodnosti kao što su automatski restart, ne bi li razvoj 
+			aplikacije išao što lakše. Više o modulu na https://www.baeldung.com/spring-boot-devtools -->
+		<!-- spring-boot-devtools provides ability to quickly setup and run services -->
+		<!-- it enables Property defaults, Automatic Restart, Live Reload, Global 
+			Settings, Remote Applications -->
+		<!-- Property defaults: for e.g. disabling caching of Thymeleaf templates 
+			spring.thymeleaf.cache=false, reason: during development, it's more important 
+			to see the changes as quickly as possible -->
+		<!-- Automatic Restart: when changes are made, developer needs to manually 
+			build the project and deploy/start the application for new changes to take 
+			effect. spring-boot-devtools automates this process, whenever files change 
+			in the classpath, applications using spring-boot-devtools will cause the 
+			application to restart -->
+		<!-- Live Reload: embedded LiveReload server that is used to trigger a 
+			browser refresh when a resource is changed. Install of LiveReload plugin 
+			for Browser is needed https://chrome.google.com/webstore/detail/remotelivereload/jlppknnillhjgiengoigajegdpieppei?hl=en-GB. -->
+		<!-- Global Settings: configure global settings that are not coupled with 
+			any application. use file spring-boot-devtools.properties located at $HOME -->
+		<!-- Remote Applications: Remote Debugging via HTTP (Remote Debug Tunnel) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- DB related dependencies -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.49</version>
+			<!-- <scope>runtime</scope> -->
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+  </dependencies>
+
+  <build>
+    <finalName>autobuskastanica</finalName>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.2.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Built-By: Danilo
+Build-Jdk: 11.0.9
+Implementation-Title: autobuskastanica Maven Webapp
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: prvizadatak
+Implementation-URL: http://www.example.com
+Created-By: Maven Integration for Eclipse
+
